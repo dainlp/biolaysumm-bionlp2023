@@ -1,9 +1,5 @@
-# small version using 1 V100 (32G) GPU
-qsub -I -qgpuvolta  -Pik70 -lwalltime=00:30:00,ncpus=12,ngpus=1,mem=8GB,jobfs=10GB,storage=scratch/ik70,wd
-# xl version using 2 V100 (32G) GPU
-qsub -I -qgpuvolta  -Pik70 -lwalltime=00:30:00,ncpus=24,ngpus=2,mem=256GB,jobfs=10GB,storage=scratch/ik70,wd
-# xl version using 4 V100 (32G) GPU
-qsub -I -qgpuvolta  -Pik70 -lwalltime=00:30:00,ncpus=48,ngpus=2,mem=256GB,jobfs=10GB,storage=scratch/ik70,wd
+# flan-t5-xxl using 4 A100 (80G) GPU
+qsub -I -qdgxa100  -Pik70 -lwalltime=00:30:00,ncpus=64,ngpus=4,mem=384GB,jobfs=10GB,storage=scratch/ik70,wd
 
 export PYTHONPATH=/scratch/ik70/virtual/dainlp-2306/lib/python3.9/site-packages
 
@@ -18,27 +14,12 @@ cd /home/599/xd2744/2311AC/code
 rm -r /scratch/ik70/TEMP/2311AC
 mkdir -p /scratch/ik70/TEMP/2311AC
 
-lr=1e-5
 port=50000
-
-
-running_id=lr_${lr}
 output_dir=/scratch/ik70/TEMP/2311AC/saved_models
 logging_dir=/scratch/ik70/TEMP/2311AC/logging_dir
 
-# small version
-model=flan-t5-small
-batch_size=32
-num_gpus=1
-
-# xl version
-model=flan-t5-xl
-batch_size=8
-num_gpus=2
-
-# xxl version
 model=flan-t5-xxl
-batch_size=4
+batch_size=16
 num_gpus=4
 
 /scratch/ik70/virtual/dainlp-2306/bin/deepspeed --num_gpus=${num_gpus} --master_port $port ./train.py \
@@ -53,30 +34,3 @@ num_gpus=4
 --deepspeed ./0.json
 
 python3 $output_dir/zero_to_fp32.py $output_dir $output_dir/pytorch_model.bin
-
-# small version
-model=flan-t5-small
-batch_size=32
-num_gpus=1
-
-# xl version
-model=flan-t5-xl
-batch_size=32
-num_gpus=2
-
-# xxl version
-model=flan-t5-xxl
-batch_size=32
-num_gpus=4
-
-/scratch/ik70/virtual/dainlp-2306/bin/deepspeed --num_gpus=${num_gpus} --master_port $port ./test.py \
---model_dir /scratch/ik70/Corpora/flan-t5/${model} \
---test_dir /scratch/ik70/cache_dir/2311AC/0/sample/test \
---per_device_eval_batch_size ${batch_size} \
---output_dir $output_dir \
---logging_dir $logging_dir \
---output_metrics_filepath ./test.metrics \
---output_predictions_filepath ./test.pred \
---deepspeed ./0.json
-
-rm -r $output_dir

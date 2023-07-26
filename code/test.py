@@ -19,6 +19,7 @@ def parse_arguments():
 
     parser.add_argument("--per_device_eval_batch_size", type=int, default=32)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--fp16", default=False, action="store_true")
 
     parser.add_argument("--generation_max_length", type=int, default=140, help="Maximum length to use for generation")
     parser.add_argument("--generation_num_beams", type=int, default=4, help="Number of beams to use for generation.")
@@ -76,7 +77,7 @@ def main():
         predict_with_generate=True,
         generation_max_length=args.generation_max_length,
         generation_num_beams=args.generation_num_beams,
-        fp16=False,  # Overflows with fp16
+        fp16=args.fp16,  # Overflows with fp16
         deepspeed=args.deepspeed,
         gradient_checkpointing=True,
         # logging & evaluation strategies

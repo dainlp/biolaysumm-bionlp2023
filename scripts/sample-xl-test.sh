@@ -1,5 +1,5 @@
-# small version using 1 V100 (32G) GPU
-qsub -I -qgpuvolta  -Pik70 -lwalltime=00:30:00,ncpus=12,ngpus=1,mem=256GB,jobfs=10GB,storage=scratch/ik70,wd
+# flan-t5-xl using 1 V100 (32G) GPU
+qsub -I -qgpuvolta  -Pik70 -lwalltime=01:00:00,ncpus=12,ngpus=1,mem=256GB,jobfs=10GB,storage=scratch/ik70,wd
 
 export PYTHONPATH=/scratch/ik70/virtual/dainlp-2306/lib/python3.9/site-packages
 
@@ -16,7 +16,6 @@ port=50000
 output_dir=/scratch/ik70/TEMP/2311AC/saved_models
 logging_dir=/scratch/ik70/TEMP/2311AC/logging_dir
 
-# xl version
 model=flan-t5-xl
 batch_size=1
 num_gpus=1

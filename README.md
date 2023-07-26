@@ -9,5 +9,5 @@ Please cite this paper if you use this code. The paper can be found at the [ACL 
 * Note that the given dataset in data/ contains only sample files, showing the needed format
 
 ## License
-The code in this repository is open-sourced under the Apache 2.0 license. See the
+The code in this repository is open-sourced under the CC BY 4.0 license. See the
 [LICENSE](LICENSE) file for details.

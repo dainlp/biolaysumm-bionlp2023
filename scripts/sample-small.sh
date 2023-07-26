@@ -1,4 +1,4 @@
-# small version using 1 V100 (32G) GPU
+# flan-t5-small using 1 V100 (32G) GPU
 qsub -I -qgpuvolta  -Pik70 -lwalltime=00:30:00,ncpus=12,ngpus=1,mem=8GB,jobfs=10GB,storage=scratch/ik70,wd
 
 export PYTHONPATH=/scratch/ik70/virtual/dainlp-2306/lib/python3.9/site-packages
@@ -14,15 +14,11 @@ cd /home/599/xd2744/2311AC/code
 rm -r /scratch/ik70/TEMP/2311AC
 mkdir -p /scratch/ik70/TEMP/2311AC
 
-lr=1e-5
 port=50000
 
-
-running_id=lr_${lr}
 output_dir=/scratch/ik70/TEMP/2311AC/saved_models
 logging_dir=/scratch/ik70/TEMP/2311AC/logging_dir
 
-# small version
 model=flan-t5-small
 batch_size=32
 num_gpus=1
@@ -39,11 +35,6 @@ num_gpus=1
 --deepspeed ./0.json
 
 python3 $output_dir/zero_to_fp32.py $output_dir $output_dir/pytorch_model.bin
-
-# small version
-model=flan-t5-small
-batch_size=32
-num_gpus=1
 
 /scratch/ik70/virtual/dainlp-2306/bin/deepspeed --num_gpus=${num_gpus} --master_port $port ./test.py \
 --model_dir /scratch/ik70/Corpora/flan-t5/${model} \
