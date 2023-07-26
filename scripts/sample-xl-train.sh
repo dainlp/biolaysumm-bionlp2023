@@ -20,7 +20,7 @@ output_dir=/scratch/ik70/TEMP/2311AC/saved_models
 logging_dir=/scratch/ik70/TEMP/2311AC/logging_dir
 
 model=flan-t5-xl
-batch_size=2
+batch_size=16
 num_gpus=1
 
 /scratch/ik70/virtual/dainlp-2306/bin/deepspeed --num_gpus=${num_gpus} --master_port $port ./train.py \
